@@ -1,0 +1,123 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+      <button pButton pRipple label="Excluir" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedVeiculos()" [disabled]="!selectedVeiculos || !selectedVeiculos.length"></button>
+    </ng-template>
+    <ng-template pTemplate="right">
+    <p-button label="Ford" [badge]="ContarCarrosPorMarca('Ford').toString()" styleClass="mr-2"></p-button>
+    <p-button label="Fiat" [badge]="ContarCarrosPorMarca('Fiat').toString()" styleClass="mr-2"></p-button>
+    <p-button label="Jeep" [badge]="ContarCarrosPorMarca('Jeep').toString()" styleClass="mr-2"></p-button>
+      <p-button label="1990" styleClass="p-button-success" [badge]="contarCarrosPorDecada('1990' ).toString()" badgeClass="p-badge-succes"></p-button>
+      <p-button label="2000" styleClass="p-button-success" [badge]="contarCarrosPorDecada('2000' ).toString()" badgeClass="p-badge-succes"></p-button>
+      <p-button label="2010" styleClass="p-button-success" [badge]="contarCarrosPorDecada('2010' ).toString()" badgeClass="p-badge-succes"></p-button>
+      <p-button label="2020" styleClass="p-button-success" [badge]="contarCarrosPorDecada('2020' ).toString()" badgeClass="p-badge-succes"></p-button>
+
+    <p-button label="Carros Não vendidos" styleClass="p-button-danger" [badge]="contarCarrosNaoVendidos().toString()" badgeClass="p-badge-danger"></p-button>
+    </ng-template>
+  </p-toolbar>
+  <p-table #dt [value]="veiculos" [rows]="10" [paginator]="true" [globalFilterFields]="['veiculo','veiculo.veiculo','veiculo.marca','veiculo.cor','veiculo.descricao']" responsiveLayout="scroll"
+           [(selection)]="selectedVeiculos" [rowHover]="true" dataKey="id"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Gerenciar Veículos</h5>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+
+        <th pSortableColumn="ano">Ano <p-sortIcon field="ano"></p-sortIcon></th>
+        <th pSortableColumn="marca">Marca <p-sortIcon field="marca"></p-sortIcon></th>
+        <th pSortableColumn="cor">Cor <p-sortIcon field="cor"></p-sortIcon></th>
+        <th pSortableColumn="vendido">Vendido <p-sortIcon field="vendido"></p-sortIcon></th>
+        <th pSortableColumn="vendido">Cadastrado há 7 dias <p-sortIcon field="vendido"></p-sortIcon></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-veiculo>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="veiculo"></p-tableCheckbox>
+        </td>
+        <td>{{veiculo.veiculo}}</td>
+        <td>{{veiculo.ano}}</td>
+        <td>{{veiculo.marca}}</td>
+        <td>{{veiculo.cor}}</td>
+        <td><span >{{veiculo.vendido?'Sim':'Não'}}</span></td>
+        <td><span >{{cadastradoNaUltimaSemana(veiculo)?'Sim':'Não'}}</span></td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editVeiculo(veiculo)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteVeiculo(veiculo)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        No total de {{veiculos ? veiculos.length : 0 }} veiculos.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog [(visible)]="veiculoDialog" [style]="{width: '450px'}" header="Veiculo Detalhes" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+
+    <div class="field">
+      <label for="nome">Nome</label>
+      <input type="text" pInputText id="nome" [(ngModel)]="veiculo.veiculo" required autofocus />
+      <small class="p-error" *ngIf="submitted && !veiculo.veiculo">Nome is required.</small>
+    </div>
+    <div class="field">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" pInputTextarea [(ngModel)]="veiculo.descricao" required rows="3" cols="20"></textarea>
+    </div>
+    <div class="field">
+      <label for="statusVenda">Marca</label>
+      <p-dropdown [(ngModel)]="veiculo.marca" inputId="statusVenda"  [options]="marcas" placeholder="Escolha">
+        <ng-template let-option pTemplate="item">
+           <label class="veiculo-badge status">{{option.value}}</label>
+        </ng-template>
+      </p-dropdown>
+    </div>
+
+    <div class="field">
+      <label class="mb-3">Carro vendido</label>
+      <div class="formgrid grid">
+        <div class="field-radiobutton col-6">
+          <p-radioButton id="marca1" nome="vendido"  [value]="true" [(ngModel)]="veiculo.vendido"></p-radioButton>
+          <label for="marca1">Sim</label>
+        </div>
+        <div class="field-radiobutton col-6">
+          <p-radioButton id="marca2" nome="vendido"  [value]="false" [(ngModel)]="veiculo.vendido"></p-radioButton>
+          <label for="marca2">Não</label>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="formgrid grid">
+      <div class="field col">
+        <label for="ano">Ano</label>
+        <p-inputNumber id="ano" [(ngModel)]="veiculo.ano" ></p-inputNumber>
+      </div>
+      <div class="field col">
+        <label for="cor">Cor</label>
+        <input type="text" pInputText id="cor" [(ngModel)]="veiculo.cor" />
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveVeiculo()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -1,12 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": "e82bad4d-a65b-4d00-ac83-283a4e26186b"
+    "analytics": "f80ce0b3-868f-4d47-b7c2-c584cdfbd29d"
   },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "front-cadveiculo-v1": {
+    "front-cadveiculo-v2": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/front-cadveiculo-v1",
+            "outputPath": "dist/front-cadveiculo-v2",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -34,7 +34,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/primeng/resources/themes/md-light-indigo/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeflex/primeflex.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": []
           },
@@ -75,10 +80,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "front-cadveiculo-v1:build:production"
+              "browserTarget": "front-cadveiculo-v2:build:production"
             },
             "development": {
-              "browserTarget": "front-cadveiculo-v1:build:development"
+              "browserTarget": "front-cadveiculo-v2:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "front-cadveiculo-v1:build"
+            "browserTarget": "front-cadveiculo-v2:build"
           }
         },
         "test": {
@@ -102,6 +107,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -110,5 +116,5 @@
       }
     }
   },
-  "defaultProject": "front-cadveiculo-v1"
+  "defaultProject": "front-cadveiculo-v2"
 }
