@@ -44,7 +44,9 @@ export class VeiculoComponent implements OnInit {
       {label: 'RENAULT', value: 'Renault'},
       {label: 'PEUGEOT', value: 'Peugeot'},
       {label: 'JEEP', value: 'Jeep'},
-      {label: 'TOYOTA', value: 'Toyota'}
+      {label: 'TOYOTA', value: 'Toyota'},
+      {label: 'CITROËN', value: 'Citroën'}
+
     ];
   }
 
